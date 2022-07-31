@@ -1,0 +1,55 @@
+int fa[N],ch[N];
+int size[N];
+void dfs1(int u){
+	int mx = 0;
+	size[u] = 1;
+	for(auto e:G[u]){
+		int v = e.to;
+		if( v==fa[u] ) continue;
+		fa[v] = u;
+		dfs1(v);
+		size[u]+= size[v];
+		if( mx<size[v] ) mx=size[v], ch[u]=v;
+	}
+}
+ll now,ans[N];
+int mx,col[N],cnt[N];
+void calc(int u){
+	cnt[col[u]]++;
+	if( cnt[col[u]] > mx ) now=col[u], mx=cnt[col[u]];
+	else if( cnt[col[u]] == mx ) now+=col[u];
+	for(auto e:G[u]){
+		int v = e.to;
+		if( v==fa[u] ) continue;
+		calc(v);
+	}
+}
+void clear(int u){
+	cnt[col[u]] = 0;
+	for(auto e:G[u]){
+		int v = e.to;
+		if( v==fa[u] ) continue;
+		clear(v);
+	}
+}
+void dfs2(int u){
+	for(auto e:G[u]){
+		int v = e.to;
+		if( v==fa[u] || v==ch[u] ) continue;
+		dfs2(v);
+		clear(v);
+		now = mx = 0;
+	}
+	if( ch[u] ){
+		dfs2(ch[u]);
+	}
+	for(auto e:G[u]){
+		int v = e.to;
+		if( v==fa[u] || v==ch[u] ) continue;
+		calc(v);
+	}
+	cnt[col[u]]++;
+	if( cnt[col[u]] > mx ) now=col[u], mx=cnt[col[u]];
+	else if( cnt[col[u]] == mx ) now+=col[u];
+	ans[u] = now;
+}

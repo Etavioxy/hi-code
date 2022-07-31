@@ -1,0 +1,28 @@
+int mindiv[N],prime[N]; int mu[N],phi[N];
+int k0[N],sig0[N]; ll pk[N],spk[N],sig[N];
+int euler(int n){
+	int tot = 0;
+	mu[1] = phi[1] = 1;
+	sig0[1] = sig[1] = 1;
+	rep(i,2,n){
+		if( mindiv[i]==0 ){
+			prime[mindiv[i]=++tot] = i;
+			mu[i] = -1;
+			phi[i] = i-1;
+			k0[i] = 1, sig0[i] = 2;
+			pk[i] = spk[i] = i, sig[i] = i+1;
+		}
+		rep(j,1,mindiv[i]){
+			int x = i*prime[j];
+			if( x>n ) break;
+			mindiv[x] = j;
+			mu[x] = j==mindiv[i] ? 0:-mu[i] ;
+			phi[x] = j==mindiv[i] ? phi[i]*prime[j]:phi[i]*(prime[j]-1);
+			k0[x] = j==mindiv[i] ? k0[i]+1:1 ;
+			sig0[x] = j==mindiv[i] ? sig0[i]/k0[x]*(k0[x]+1):sig0[i]*2 ;
+			pk[x] = j==mindiv[i] ? pk[i]*prime[j]:prime[j] ;
+			spk[x] = j==mindiv[i] ? spk[i]+pk[x]:pk[x]+1 ;
+			sig[x] = j==mindiv[i] ? sig[i]/spk[i]*spk[x]:sig[i]*spk[x] ;
+		}
+	} return tot;
+}

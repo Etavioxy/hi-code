@@ -1,0 +1,20 @@
+struct ss{ int x,dep; };
+int bfs(int s,int t){
+	queue <ss> q;
+	vector<bool> vis(N);
+	vis[s] = 1;
+	q.push((ss){s,0});
+	while( q.empty()==0 ){
+		int u=q.front().x, dep=q.front().dep;
+		q.pop();
+		for(auto e:G[u]){
+			int v = e.to;
+			if( vis[v]==0 ){
+				vis[v] = 1;
+				if( v==t ) return dep+1;
+				q.push((ss){v,dep+1});
+			}
+		}
+	}
+	return -1;
+}

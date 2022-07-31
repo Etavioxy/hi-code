@@ -1,0 +1,24 @@
+struct ss{
+	ll dis; int x;
+	bool operator<(const ss&e)const{ return dis>e.dis; }
+};
+ll dis[N]; bool vis[N];
+void dijkstra(int n,int s){
+	priority_queue<ss> pq;
+	memset(vis+1,0,sizeof(bool)*n);
+	memset(dis+1,0x3f,sizeof(ll)*n);
+	dis[s] = 0;
+	pq.push((ss){0,s});
+	while( pq.empty()==0 ){
+		int u= pq.top().x;
+		pq.pop();
+		if( vis[u] ) continue;
+		vis[u] = 1;
+		each(i,u){
+			int v = bow[i].to;
+			if( chk_min(dis[v],dis[u]+bow[i].len) ){
+				if( vis[v]==0 ) pq.push((ss){dis[v],v});
+			}
+		}
+	}
+}

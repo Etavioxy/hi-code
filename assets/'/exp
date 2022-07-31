@@ -1,0 +1,11 @@
+Poly EXP(Poly A){
+	int n = A.size(); Poly ANS(1);
+	ANS[0] = 1;
+	for(int t=1; t<n ; t<<=1){
+		ANS.resize(t*2);
+		Poly B = LN(ANS); B[0] = (A[0]-B[0]+1)%mod;
+		rep(i,1,t*2-1) B[i] = (A[i]-B[i])%mod;
+		ANS.resize(t*4), B.resize(t*4);
+		ANS = MUL(ANS,B), ANS.resize(t*2);
+	} return ANS;
+}

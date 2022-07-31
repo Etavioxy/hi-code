@@ -1,0 +1,50 @@
+struct dt{
+	ll L,R;
+	int l,r;
+	ll operator[](int x){
+		if( x==l ) return L;
+		return L+(R-L)/(r-l)*(x-l);
+	}
+};
+dt NIL = (dt){(ll)-1e18,(ll)-1e18};
+class SEG{
+private:
+	dt tr[N*4];
+	#define lc(x) ((x)<<1)
+	#define rc(x) ((x)<<1|1)
+	void add(int x,dt k){
+		bool ql=tr[x].L<k.L, qr=tr[x].R<k.R;
+		if( ql==0 && qr==0 ) return ;
+		if( ql==1 && qr==1 ) return tr[x]=k, void();
+		int mid = tr[x].l+(tr[x].r-tr[x].l)/2;
+		if( tr[x][mid]<k[mid] ) swap(tr[x],k), ql^=1, qr^=1;
+		if( ql==1 && qr==0 ) add(lc(x),(dt){k.L,k[mid],k.l,mid});
+		if( ql==0 && qr==1 ) add(rc(x),(dt){k[mid+1],k.R,mid+1,k.r});
+	}
+	ll query(int x,int q){
+		if( tr[x].l==tr[x].r ) return tr[x][q];
+		int mid = tr[x].l+(tr[x].r-tr[x].l)/2;
+		return max(tr[x][q], q<=mid ?
+			query(lc(x),q):
+			query(rc(x),q));
+	}
+	void build(int x,int l,int r){
+		tr[x] = (dt){(ll)-1e18,(ll)-1e18,l,r};
+		if( l==r ) return ;
+		int mid = tr[x].l+(tr[x].r-tr[x].l)/2;
+		build(lc(x), l,mid );
+		build(rc(x),mid+1,r);
+	}
+	int Ln,Rn;
+public:
+	void init(int l,int r){
+		Ln = l, Rn = r;
+		build(1,Ln,Rn);
+	}
+	void add(ll k,ll b){
+		add(1,(dt){Ln*k+b,Rn*k+b,Ln,Rn});
+	}
+	ll query(int x){
+		return query(1,x);
+	}
+};

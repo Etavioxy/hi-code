@@ -1,0 +1,39 @@
+class BIT{
+private:
+	int n,T;
+	ll tr[N];
+	#define lowbit(x) ((x)&-(x))
+//	stack<int> stk;
+public:
+	void init(int n0){
+		n = n0;
+		T = log2(n);
+	}
+	void add(int i,ll k){
+		if( i<=0 ) return ;
+//		stk.push(i);
+		for(;i<=n;i+=lowbit(i)) tr[i]+=k;
+	}
+	ll query(int i){
+		if( i<=0 ) return 0;
+		ll ans = 0;
+		for(;i;i-=lowbit(i)) ans+=tr[i];
+		return ans;
+	}
+	int find_kth(ll k){
+		if( k<=0 ) return 0;
+		int ans = 0;
+		rev_rep(i,T,0){
+			int x = ans^(1ll<<i);
+			if( x<=n && tr[x]<k ) ans=x, k-=tr[x];
+		}
+		return ans+1;
+	}
+/*	void clear(){
+		while( stk.empty()==0 ){
+			int i = stk.top();
+			stk.pop();
+			for(;i<=n;i+=lowbit(i)) tr[i]=0;
+		}
+	}*/
+};

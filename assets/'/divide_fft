@@ -1,0 +1,9 @@
+Poly calc(int l,int r,ll*a){
+	if( l==r ) return (Poly){1,-a[l]};
+	int mid = (l+r)/2;
+	Poly L = calc( l,mid ,a),
+		 R = calc(mid+1,r,a);
+	int n = set2(r-l+2);
+	L.resize(n), R.resize(n);
+	return MUL(L,R);
+}

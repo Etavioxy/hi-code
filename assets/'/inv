@@ -1,0 +1,11 @@
+Poly INV(Poly A){
+	int n = A.size(); Poly ANS(1);
+	ANS[0] = inv(A[0]);
+	for(int t=1; t<n ; t<<=1){
+		Poly A0(A.begin(),A.begin()+t*2);
+		ANS.resize(t*4), A0.resize(t*4);
+		NTT(ANS,1), NTT(A0,1);
+		rep(i,0,t*4-1) ANS[i] = (2-ANS[i]*A0[i]%mod)*ANS[i]%mod;
+		NTT(ANS,-1), ANS.resize(t*2);
+	} return ANS;
+}

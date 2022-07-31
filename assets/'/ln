@@ -1,0 +1,16 @@
+Poly Direv(const Poly&A){
+	int n = A.size(); Poly ANS(n);
+	rep(i,1,n-1) ANS[i-1] = i*A[i]%mod;
+	return ANS;
+}
+Poly Inter(const Poly&A){
+	int n = A.size(); Poly ANS(n);
+	rep(i,1,n-1) ANS[i] = inv(i)*A[i-1]%mod;
+	return ANS;
+}
+Poly LN(Poly A){
+	int n = A.size(); Poly B = Direv(A); A = INV(A);
+	A.resize(n*2), B.resize(n*2);
+	A = MUL(A,B), A.resize(n);
+	return Inter(A);
+}

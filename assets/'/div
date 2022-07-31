@@ -1,0 +1,21 @@
+Poly DIV(Poly A,Poly B){
+	int n = A.size()-B.size()+1;
+	reverse(A.begin(),A.end());
+	reverse(B.begin(),B.end());
+	int T = set2(n);
+	B.resize(T), B = INV(B);
+	A.resize(T*2), B.resize(T*2); 
+	fill(A.begin()+T,A.begin()+T*2,0);
+	A = MUL(A,B), A.resize(n);
+	reverse(A.begin(),A.end());
+	return A;
+}
+Poly MOD(Poly A,Poly B){
+	Poly C = DIV(A,B);
+	int n = A.size()-1, m = B.size()-1;
+	int T = set2(n+1);
+	B.resize(T), C.resize(T);
+	C = MUL(B,C);
+	rep(i,0,m-1) A[i] = (A[i]-C[i])%mod;
+	A.resize(m); return A;
+}

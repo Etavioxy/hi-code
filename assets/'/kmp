@@ -1,0 +1,9 @@
+int nxt[N];
+il void KMP(int n,char*s){
+	int j = 0;
+	rep(i,2,n){
+		while( j && s[j+1]!=s[i] ) j=nxt[j];
+		if( s[j+1]==s[i] ) j++;
+		nxt[i] = j;
+	}
+}

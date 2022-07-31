@@ -1,0 +1,31 @@
+namespace Vtree{
+struct Edge{ int nxt,to; } bow[N];
+int head[N],tot_e;
+void add(int x,int y){
+	bow[++tot_e]=(Edge){head[x],y};
+	head[x] = tot_e;
+}
+using vec = vector<int>;
+vec a,b;
+int build(vec&a0){
+	a = a0;
+	sort(a.begin(),a.end(),[](int x,int y)->bool{ return pos[x]<pos[y]; });
+	static int stk[N];
+	int top=1; stk[1]=a[0];
+	rep(i,1,(int)a.size()-1){
+		int x=a[i], lca=LCA(x,stk[top]);
+		while( top>1 && pos[stk[top-1]] >= pos[lca] ) add(stk[top-1],stk[top]), top--;
+		if( lca!=stk[top] ) add(lca,stk[top]), b.push_back(stk[top]=lca);
+		stk[++top]=x;
+	}
+	while( top>1 ) add(stk[top-1],stk[top]), top--;
+	return stk[1];
+}
+void clear(){
+	tot_e = 0;
+	rep(i,0,(int)a.size()-1) head[a[i]] = 0;
+	rep(i,0,(int)b.size()-1) head[b[i]] = 0;
+	a.clear();
+	b.clear();
+}
+}; // Vtree

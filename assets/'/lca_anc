@@ -1,0 +1,23 @@
+int fa[N],depth[N];
+int anc[N][20];
+void link(int u){
+	depth[u] = depth[fa[u]]+1;
+	anc[u][0] = fa[u];
+	rep(t,1,19) anc[u][t]=anc[anc[u][t-1]][t-1];
+}
+void dfs0(int u){
+	link(u);
+	for(auto e:G[u]){
+		int v = e.to;
+		if( v==fa[u] ) continue;
+		fa[v] = u;
+		dfs0(v);
+	}
+}
+int LCA(register int p,register int q){
+	if( depth[p]<depth[q] ) swap(p,q);
+	rev_rep(t,19,0) if( depth[anc[p][t]]>=depth[q] ) p=anc[p][t];
+	if( p==q ) return p;
+	rev_rep(t,19,0) if( anc[p][t]!=anc[q][t] ) p=anc[p][t], q=anc[q][t];
+	return fa[p];
+}

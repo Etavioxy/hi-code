@@ -1,0 +1,4 @@
+void FMT_OR(ll*A,int n,int IFMT){
+	for(int t=1;t<n;t<<=1) rep(i,0,n-1)
+		if( i&t ) A[i] = (A[i]+IFMT*A[i^t])%mod;
+}

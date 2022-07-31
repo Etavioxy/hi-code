@@ -1,0 +1,35 @@
+struct Edge{ int nxt,to; ll cap,len; } bow[M*2];
+int head[N],tot_e,tot_v,s,t;
+void add(int x,int y,ll z,ll w){
+	tot_e++;
+	bow[tot_e<<1] = (Edge){head[x],y,z,w};
+	bow[tot_e<<1|1] = (Edge){head[y],x,0,-w};
+	head[y] = (head[x]=tot_e<<1)|1;
+}
+ll dis[N]; int pre[N],pre_e[N];
+bool SPFA(){
+	static bool exist[N];
+	queue<int> q;
+	memset(dis,0x3f,sizeof(ll)*(tot_v+1));
+	dis[s] = 0;
+	q.push(s), exist[s] = 1;
+	while( q.empty()==0 ){
+		int u = q.front();
+		q.pop();
+		exist[u] = 0;
+		each(i,u) if( bow[i].cap ){
+			int v = bow[i].to;
+			if( chk_min(dis[v],dis[u]+bow[i].len) ){
+				pre[v] = u, pre_e[v] = i;
+				if( exist[v]==0 ) q.push(v), exist[v] = 1;
+			}
+		}
+	}
+	return dis[t]<=1e18;
+}
+ll EK(){
+	ll flow = 1e18;
+	for(int x=t,i=pre_e[x];x!=s;x=pre[x],i=pre_e[x]) flow = min(flow,bow[i].cap);
+	for(int x=t,i=pre_e[x];x!=s;x=pre[x],i=pre_e[x]) bow[i].cap-=flow, bow[i^1].cap+=flow;
+	return flow;
+}

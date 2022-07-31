@@ -1,0 +1,11 @@
+using Primes = map<ll,int>;
+Primes primes(ll n){
+	int ed = sqrt(n);
+	Primes ans;
+	rep(i,2,ed) if( n%i==0 ){
+		int& cnt = ans[i];
+		while( n%i==0 ) cnt++, n/=i;
+	}
+	if( n!=1 ) ans[n]=1;
+	return ans;
+}

@@ -1,0 +1,23 @@
+class SQ{
+private:
+	enum{B=400};
+	int pos[N],ed[B];
+	ll a[N],b[B];
+public:
+	void init(int n){
+		int block=sqrt(n), T=0;
+		while( ed[T]!=n ) ed[T+1] = min(n,ed[T]+block), T++;
+		rep(t,1,T) rep(i,ed[t-1]+1,ed[t]) pos[i] = t;
+	}
+	void add(int x,ll y){
+		a[x] += y;
+		b[pos[x]] += y;
+	}
+	ll query(int x){
+		int T = pos[x];
+		ll ans = 0;
+		rep(t,1,T-1) ans += b[t];
+		rep(i,ed[T-1]+1,x) ans += a[i];
+		return ans;
+	}
+};

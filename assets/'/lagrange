@@ -1,0 +1,25 @@
+class lagrange{
+private:
+	int n;
+	ll x[N],y[N];
+public:
+	void push(ll x0,ll y0){
+		n++; x[n]=x0, y[n]=y0;
+	}
+	void solve(){
+		rep(i,1,n){
+			ll t = 1;
+			rep(j,1,n) if( i!=j ) t = t*(x[i]-x[j])%mod;
+			y[i] = y[i]*inv(t)%mod;
+		}
+	}
+	ll query(ll k){
+		static ll p[N],q[N];
+		p[0] = q[n+1] = 1;
+		rep(i,1,n) p[i]=p[i-1]*(k-x[i])%mod;
+		rev_rep(i,n,1) q[i]=q[i+1]*(k-x[i])%mod;
+		ll ans = 0;
+		rep(i,1,n) ans = (ans+y[i]*p[i-1]%mod*q[i+1])%mod;
+		return ans;
+	}
+};

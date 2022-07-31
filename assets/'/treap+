@@ -1,0 +1,69 @@
+class Treap{
+private:
+	struct node{
+		node*c[2];
+		unsigned rate;
+		int key,size;
+		#define lch c[0]
+		#define rch c[1]
+		void update(){
+			size = lch->size + 1 + rch->size;
+		}
+	}d[N*50];
+	int tot_d;
+	void split(node*e,int k,node*&x,node*&y){
+		if( e==d ) return x=y=d, void();
+		node*w = &(d[++tot_d]=*e);
+		int lsz = w->lch->size;
+		( k<=lsz ?
+			(y=w, split(w->lch,k,x,y->lch)):
+			(x=w, split(w->rch,k-lsz-1,x->rch,y)));
+		w->update();
+	}
+	node*merge(node*x,node*y){
+		if( x==d ) return y;
+		if( y==d ) return x;
+		( x->rate > y->rate ?
+			(x->rch=merge(x->rch,y)):
+			(swap(x,y), x->lch=merge(y,x->lch)));
+		return x->update(), x;
+	}
+	node*find(node*e,int k){
+		while( e!=d ){
+			int lsz=e->lch->size;
+			if( k==lsz+1 ) return e;
+			( k<=lsz ? e=e->lch:(k-=lsz+1,e=e->rch) );
+		} return d;
+	}
+	int query(node*e,int k){
+		int ans = 0;
+		while( e!=d ){
+			int ek=e->key, lsz=e->lch->size;
+			( k<ek ? e=e->lch:(ans+=lsz+1,e=e->rch) );
+		} return ans;
+	}
+	unsigned SEED;
+	unsigned RND(){ return SEED=(SEED*13)+131; }
+	node*ver[N];
+public:
+	void init(unsigned seed){
+		SEED = seed;
+		*d = (node){d,d};
+		ver[0] = d;
+	}
+	void copy(int x,int y){ ver[x] = ver[y]; }
+	void insert(int x,int key){
+		node*e = &( d[++tot_d] = (node){d,d,RND(),key,1} );
+		node*L,*R;
+		split(ver[x],query(ver[x],key),L,R);
+		ver[x] = merge(merge(L,e),R);
+	}
+	void erase(int x,int key){
+		node*L,*R,*e;
+		split(ver[x],query(ver[x],key),L,R);
+		split(L,L->size-1,L,e);
+		ver[x] = merge(L,R);
+	}
+	int find(int x,int k){ return find(ver[x],k)->key; }
+	int query(int x,int key){ return query(ver[x],key); }
+};

@@ -1,0 +1,37 @@
+int fa[N],ch[N],size[N],depth[N];
+void dfs1(int u){
+	int mxc = 0;
+	size[u] = 1;
+	for(auto e:G[u]){
+		int v = e.to;
+		if( v==fa[u] ) continue;
+		fa[v] = u;
+		depth[v] = depth[u]+1;
+		dfs1(v);
+		size[u] += size[v];
+		if( chk_max(mxc,size[v]) ) ch[u] = v;
+	}
+}
+int seq[N],tp[N],pos[N],tot_seq;
+void dfs2(int u){
+	seq[pos[u]=++tot_seq] = u;
+	if( tp[u]==0 ) tp[u] = u;
+	if( ch[u]!=0 ){
+		tp[ch[u]] = tp[u];
+		dfs2(ch[u]);
+	}
+	for(auto e:G[u]){
+		int v = e.to;
+		if( v==fa[u] || v==ch[u] ) continue;
+		dfs2(v);
+	}
+}
+int LCA(int p,int q){
+	while( tp[p]!=tp[q] ){
+		if( depth[tp[p]]<depth[tp[q]] ) swap(p,q);
+		int o = tp[p];
+		p = fa[o];
+	}
+	if( depth[p]<depth[q] ) swap(p,q);
+	return q;
+}

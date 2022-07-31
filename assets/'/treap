@@ -1,0 +1,63 @@
+class Treap{
+private:
+	struct node{
+		node*c[2];
+		unsigned rate;
+		int key,size;
+		#define lch c[0]
+		#define rch c[1]
+		void update(){
+			size = lch->size + 1 + rch->size;
+		}
+	}d[N];
+	node*&Root(){ return d->lch; }
+	void rotate(node*&y,bool o){
+		node*x=y, *e=x->c[o], *w=e->c[o^1];
+		y=e, e->c[o^1]=x, x->c[o]=w;
+		x->update(), e->update();
+	}
+	void insert(node*&e,node*x){
+		if( e==d ) return e=x, void();
+		bool o = e->key < x->key;
+		insert(e->c[o],x);
+		if( e->c[o]->rate > e->rate ) rotate(e,o);
+		else e->update();
+	}
+	void erase(node*&e,int k){
+		if( e==d ) return ;
+		if( e->key!=k ) return erase(e->c[e->key<k],k), e->update();
+		if( e->lch==d ) return e=e->rch, void();
+		if( e->rch==d ) return e=e->lch, void();
+		bool o = e->lch->rate < e->rch->rate;
+		rotate(e,o);
+		erase(e->c[o^1],k), e->update();
+	}
+	node*find(node*e,int k){
+		while( e!=d ){
+			int lsz=e->lch->size;
+			if( k==lsz+1 ) return e;
+			( k<=lsz ? e=e->lch:(k-=lsz+1,e=e->rch) );
+		} return d;
+	}
+	int query(node*e,int k){
+		int ans = 0;
+		while( e!=d ){
+			int ek=e->key, lsz=e->lch->size;
+			( k<ek ? e=e->lch:(ans+=lsz+1,e=e->rch) );
+		} return ans;
+	}
+	unsigned SEED;
+	unsigned RND(){ return SEED=(SEED*13)+131; }
+public:
+	void init(unsigned seed){
+		SEED = seed;
+		*d = (node){d,d};
+	}
+	void insert(int id,int key){
+		node*e = &( d[id] = (node){d,d,RND(),key,1} );
+		insert(Root(),e);
+	}
+	void erase(int key){ erase(Root(),key); }
+	int find(int k){ return find(Root(),k)->key; }
+	int query(int key){ return query(Root(),key); }
+};

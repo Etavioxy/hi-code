@@ -1,0 +1,32 @@
+using range = pair<int,int>;
+using CH = map<range,int>;
+class chtholly{
+private:
+	#define qwq first
+	#define pwp second
+	CH m;
+	CH::iterator split(int p){
+		CH::iterator it = m.lower_bound(range(p,0));
+		if( it->qwq.qwq==p ) return it;
+		it--;
+		int l = it->qwq.qwq, r = it->qwq.pwp, x=it->pwp;
+		m.erase(it);
+		m[range(l,p-1)] = x;
+		m[range(p,r)] = x;
+		return m.find(range(p,r));
+	}
+public:
+	void init(int n){
+		m.clear();
+		m[range(1,n)] = -1;
+		m[range(n+1,n)] = -1;
+	}
+	void assign(int l,int r,int x){
+		CH::iterator R = split(r+1), L = split(l);
+		m.erase(L,R);
+		m[range(l,r)] = x;
+	}
+	int query(int x){
+		return split(x)->pwp;
+	}
+};

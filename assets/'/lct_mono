@@ -1,0 +1,68 @@
+struct dt{ ll mx,sum; };
+dt NIL = (dt){(ll)-1e18,0};
+dt operator+(const dt&a,const dt&b){
+	return (dt){max(a.mx,b.mx),a.sum+b.sum};
+}
+class LCT{
+private:
+	struct node{
+		node*fa,*c[2];
+		dt x,x0;
+		#define lch c[0]
+		#define rch c[1]
+		void update(){
+			x = lch->x + x0 + rch->x;
+		}
+	}d[N];
+	bool chk(node*e){ return e->fa->rch==e; }
+	bool nroot(node*e){
+		return e->fa!=d&&(e->fa->lch==e||e->fa->rch==e);
+	}
+	node*get(node*x,bool o,node*y){
+		return x->c[o]=y, y->fa=x;
+	}
+	void rotate(node*e){
+		bool o = chk(e), ox= chk(e->fa);
+		node*x = e->fa, *y = x->fa, *w = e->c[o^1];
+		( nroot(x) ? y->c[ox]=e:0 ), e->c[o^1]=x, x->c[o]=w;
+		( w!=d ? w->fa=x:0 ), x->fa=e, e->fa=y;
+		x->update(), e->update();
+	}
+	void Downdate(node*e){
+		if( nroot(e) ) Downdate(e->fa);
+		e->downdate();
+	}
+	node*splay(node*e){
+		Downdate(e);
+		while( nroot(e) ){
+			node*x = e->fa;
+			if( nroot(x) ) rotate(chk(e)^chk(x)?e:x);
+			rotate(e);
+		} return e;
+	}
+	node*access(node*x){
+		node*y=d;
+		for(;x!=d;y=x,x=x->fa){
+			splay(x), get(x,1,y), x->update();
+		} return y;
+	}
+	void link(node*x,node*y){
+		x->fa = y;
+	}
+	node*split(node*y){
+		access(y); return splay(y);
+	}
+public:
+	void init(int n){
+		*d = (node){d,d,d,NIL,NIL};
+		rep(i,1,n) d[i] = (node){d,d,d,NIL,NIL};
+	}
+	bool chk(int x,int y){
+		return findroot(d+x)==findroot(d+y);
+	}
+	void add(int x,int k){
+	}
+	dt query(int x,int y){
+		return split(d+x,d+y)->x;
+	}
+};

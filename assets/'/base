@@ -1,0 +1,29 @@
+template<int B>
+struct BASE{
+	ll a[B];
+	ll operator[](int x)const{ return a[x]; }
+	ll& operator[](int x){ return a[x]; }
+	int find(ll x){
+		rep(i,0,B-1) if( x&(1ll<<i) ){
+			if( a[i]==0 ) return i;
+			x^=a[i];
+		}
+		return -1;
+	}
+	bool insert(ll x){
+		int p = find(x);
+		if( p==-1 ) return 0;
+		rep(i,0,B-1) if( x&(1ll<<i) ) x^=a[i];
+		rep(i,0,B-1) if( a[i]&(1ll<<p) ) a[i]^=x;
+		a[p] = x;
+		return 1;
+	}
+};
+template<int B>
+BASE<B> operator+(const BASE<B>&a,const BASE<B>&b){
+	auto ans = a;
+	rep(i,0,B-1) if( b[i]!=0 ){
+		ans.insert(b[i]);
+	}
+	return ans;
+}

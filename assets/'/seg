@@ -1,0 +1,75 @@
+struct dt{ ll mx,sum; };
+dt NIL = (dt){(ll)-1e18,0};
+dt operator+(const dt&a,const dt&b){
+	return (dt){max(a.mx,b.mx),a.sum+b.sum};
+}
+class SEG{
+private:
+	dt tr[N*4];
+	ll tag[N*4];
+	int len[N*4];
+	#define lc(x) ((x)<<1)
+	#define rc(x) ((x)<<1|1)
+	void update(int x){
+		tr[x] = tr[lc(x)] + tr[rc(x)];
+	}
+	void func(int x,ll k){
+		tr[x].mx+=k, tr[x].sum+=len[x]*k, tag[x]+=k;
+	}
+	void downdate(int x){
+		if( tag[x] ){
+			func(lc(x),tag[x]), func(rc(x),tag[x]);
+			tag[x]=0;
+		}
+	}
+	void add(int x,int l,int r,int ql,int qr,ll k){
+		if( ql<=l && r<=qr ) return func(x,k), void();
+		downdate(x);
+		int mid = (l+r)/2;
+		( ql<=mid ? add(lc(x), l,mid ,ql,qr,k) : void());
+		( mid< qr ? add(rc(x),mid+1,r,ql,qr,k) : void());
+		update(x);
+	}
+	dt query(int x,int l,int r,int ql,int qr){
+		if( ql<=l && r<=qr ) return tr[x];
+		downdate(x);
+		int mid = (l+r)/2;
+		return ( ql<=mid ? query(lc(x), l,mid ,ql,qr) : NIL)
+			  +( mid< qr ? query(rc(x),mid+1,r,ql,qr) : NIL);
+	}
+	int find(int x,int l,int r,ll k){
+		if( l==r ) return l;
+		downdate(x);
+		int mid = (l+r)/2;
+		dt L = tr[lc(x)];
+		return k <= L.mx ?
+			find(lc(x), l,mid ,k):
+			find(rc(x),mid+1,r,k);
+	}
+	void build(int x,int l,int r,ll*a){
+		len[x] = r-l+1;
+		if( l==r ) return tr[x]=(dt){a[l]}, void();
+		int mid = (l+r)/2;
+		build(lc(x), l,mid ,a);
+		build(rc(x),mid+1,r,a);
+		update(x);
+	}
+	int n;
+public:
+	void init(int n0,ll*a){
+		n = n0;
+		build(1,1,n,a);
+	}
+	void add(int l,int r,ll k){
+		if( l>r ) return ;
+		add(1,1,n,l,r,k);
+	}
+	dt query(int l,int r){
+		if( l>r ) return NIL;
+		return query(1,1,n,l,r);
+	}
+	int find(int k){
+		if(	tr[1].mx < k ) return 0;
+		return find(1,1,n,k);
+	}
+};

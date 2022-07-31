@@ -1,0 +1,6 @@
+int dcmp(double x){
+	static const double eps = 1e-12;
+	if( x<-eps ) return -1;
+	if( x> eps ) return 1;
+	return 0;
+}

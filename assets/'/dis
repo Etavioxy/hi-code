@@ -1,0 +1,14 @@
+class DIS{
+private:
+	int *a[N],top,num[N];
+public:
+	int operator[](int x){ return num[x]; }
+	void push(int&x){ a[++top] = &x; }
+	int solve(){
+		rep(i,1,top) num[i] = *a[i];
+		sort(num+1,num+top+1);
+		int tot = unique(num+1,num+top+1)-num-1;
+		rep(i,1,top) *a[i] = lower_bound(num+1,num+tot+1,*a[i])-num;
+		return tot;
+	}
+};

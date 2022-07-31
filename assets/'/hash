@@ -1,0 +1,21 @@
+using ull = unsigned ll;
+const ull base = 1e9+7;
+ull powb[N];
+int powb_n;
+void init_powb(int n){
+	powb[0] = 1;
+	rep(i,powb_n+1,n) powb[i]=powb[i-1]*base;
+	powb_n = max(powb_n,n);
+}
+class HASH{
+private:
+	ull a[N];
+public:
+	void init(int n,char*s){
+		init_powb(n);
+		rep(i,1,n) a[i]=a[i-1]*base+s[i];
+	}
+	ull query(int l,int r){
+		return a[r]-(a[l-1]*powb[r-l+1]);
+	}
+};

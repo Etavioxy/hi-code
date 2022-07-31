@@ -1,0 +1,20 @@
+class UNI{
+public:
+	int fa[N]; bool len[N];
+	void init(int n){
+		rep(i,1,n) fa[i] = i, len[i] = 0;
+	}
+	int fd(int x){
+		return fa[x]==x ? x:(fd(fa[x]),len[x]^=len[fa[x]],fa[x]=fa[fa[x]]) ;
+	}
+	int operator[](int x){ return fd(x); }
+	bool merge(int x,int y,int z){
+		int fx=fd(x), fy=fd(y);
+		if( fx!=fy ){
+			fa[fx]  = fy;
+			len[fx] = len[x]^len[y]^z;
+			return 1;
+		}
+		return len[x]^len[y]^z ? -1:0;
+	}
+};

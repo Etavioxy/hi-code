@@ -1,0 +1,15 @@
+const ll inv2 = inv(2);
+void FWT_XOR(ll*A,int n,int IFWT){
+	for(int t=1;t<n;t<<=1){
+		for(int l=0;l<n;l+=t*2){
+			rep(i,0,t-1){
+				ll x=A[l+i], y=A[l+t+i];
+				A[l+i] = (x+y)%mod;
+				A[l+t+i] = (x-y)%mod;
+			}
+		}
+		if( IFWT==-1 ){
+			rep(i,0,n-1) A[i] = A[i]*inv2%mod;
+		}
+	}
+}

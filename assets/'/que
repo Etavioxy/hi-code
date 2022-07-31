@@ -1,0 +1,18 @@
+class QUE{
+private:
+	ll a[N];
+	int hd,tl;
+public:
+	QUE(){ clear(); }
+	void clear(){ hd=1,tl=0; }
+	ll top(){
+		return hd<=tl ? a[hd]:-1e9 ;
+	}
+	void push(ll x){
+		while( hd<=tl && a[tl]<x ) tl--;
+		a[++tl]=x;
+	}
+	void pop(ll x){
+		if( x==top() ) hd++;
+	}
+};

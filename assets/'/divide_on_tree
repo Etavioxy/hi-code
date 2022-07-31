@@ -1,0 +1,42 @@
+int size[N]; bool vis[N];
+class tree{
+private:
+	int n,mn,rt;
+	void dfs(int u,int fa){
+		size[u] = 1; int mx = 0;
+		for(auto e:G[u]){
+			int v = e.to;
+			if( v==fa || vis[v] ) continue;
+			dfs(v,u);
+			size[u] += size[v];
+			mx = max(mx,size[v]);
+		}
+		mx = max(mx,n-size[u]);
+		if( chk_min(mn,mx) ) rt=u;
+	}
+public:
+	int find(int u,int n0){
+		n = n0, mn = 1e9;
+		dfs(u,0); return rt;
+	}
+}tree;
+void dfs(int u,int fa,int opt){
+	for(auto e:G[u]){
+		int v = e.to;
+		if( v==fa || vis[v] ) continue;
+		dfs(v,u,opt);
+	}
+}
+void divide(int u){
+	vis[u] = 1;
+	each(i,u){
+		int v = bow[i].to;
+		if( vis[v] ) continue;
+		dfs(v,u,0);
+	}
+	each(i,u){
+		int v= bow[i].to;
+		if( vis[v] ) continue;
+		divide(tree.find(v,size[v]));
+	}
+}

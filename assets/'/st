@@ -1,0 +1,19 @@
+class ST{
+private:
+	int F(int x,int y){ return min(x,y); }
+	int d[21][N],LOG2[N];
+public:
+	void init(int n,int*a){
+		memcpy(d[0]+1,a+1,sizeof(int)*n);
+		rep(i,2,n) LOG2[i] = LOG2[i>>1]+1;
+		int T = LOG2[n];
+		rep(t,1,T){
+			int ed = n-(1<<t)+1;
+			rep(i,1,ed) d[t][i] = F(d[t-1][i],d[t-1][i+(1<<(t-1))]);
+		}
+	}
+	int query(int l,int r){
+		int t = LOG2[r-l+1];
+		return F(d[t][l],d[t][r-(1<<t)+1]);
+	}
+};

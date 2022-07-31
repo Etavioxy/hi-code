@@ -1,0 +1,16 @@
+class HEAP{
+public:
+	struct node{ int val,dis,lch,rch; } d[N];
+	int merge(int x,int y){
+		if( x==0 || y==0 ) return x+y;
+		if( d[x].val < d[y].val ) swap(x,y);
+		d[x].rch = merge(d[x].rch,y);
+		int &L=d[x].lch, &R=d[x].rch;
+		if( d[L].dis < d[R].dis ) swap(L,R);
+		d[x].dis = d[R].dis + 1;
+		return x;
+	}
+	int pop(int x){
+		return merge(d[x].lch,d[x].rch);
+	}
+};

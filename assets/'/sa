@@ -1,0 +1,34 @@
+int sa[N],cnt[N],c1[N],c2[N];
+void sa_sort(int n,char*s){
+	int m = max(n,'z');
+	int*x = c1, *y = c2;
+	memset(cnt+1,0,sizeof(int)*m);
+	rep(i,1,n) cnt[x[i]=s[i]]++;
+	rep(i,1,m) cnt[i]+=cnt[i-1];
+	rev_rep(i,n,1) sa[cnt[x[i]]--]=i;
+	for(int t=1;t<=n;t<<=1){
+		int p = 0;
+		rep(i,n-t+1,n) y[++p]=i;
+		rep(i,1,n) if( sa[i]>t ) y[++p]=sa[i]-t;
+		memset(cnt+1,0,sizeof(int)*m);
+		rep(i,1,n) cnt[x[i]]++;
+		rep(i,1,m) cnt[i]+=cnt[i-1];
+		rev_rep(i,n,1) sa[cnt[x[y[i]]]--]=y[i];
+		swap(x,y);
+		x[sa[1]] = p = 1;
+		rep(i,2,n) x[sa[i]]= y[sa[i]]==y[sa[i-1]]&&y[sa[i]+t]==y[sa[i-1]+t] ? p:++p;
+		if( p>=n ) break;
+		m = p;
+	}
+}
+int rk[N],ht[N];
+void sa_ht(int n,char*s){
+	rep(i,1,n) rk[sa[i]] = i;
+	int k = 0;
+	rep(i,1,n){
+		if( k ) k--;
+		int j = sa[rk[i]-1];
+		while( s[j+k]==s[i+k] ) k++;
+		ht[rk[i]] = k;
+	}
+}
