@@ -1,6 +1,0 @@
-struct Edge{ int to; };
-vector<Edge> G[N];
-void add(int x,int y){
-	G[x].push_back((Edge){y});
-	G[y].push_back((Edge){x});
-}
