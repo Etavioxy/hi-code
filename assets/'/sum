@@ -1,9 +1,0 @@
-ll Sum_mu(ll n){
-	static map<ll,ll> mp;
-	if( n<=init_n ) return mu[n];
-	if( mp.count(n) ) return n;
-	ll& ans = mp[n] = 1;
-	for(ll l=2,r;l<=n&&(r=n/(n/l));l=r+1){
-		ans = (ans-(r-l+1)*Sum_mu(n/l))%mod;
-	} return ans;
-}

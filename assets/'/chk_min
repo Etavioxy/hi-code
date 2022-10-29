@@ -1,3 +1,0 @@
-template<typename T>
-bool chk_min(T&x,const T&y){ return (y<x?(x=y,1):0); }
-

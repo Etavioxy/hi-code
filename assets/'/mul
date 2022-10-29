@@ -1,6 +1,0 @@
-Poly MUL(Poly A,Poly B){
-	int n = A.size();
-	NTT(A,1), NTT(B,1);
-	rep(i,0,n-1) A[i] = A[i]*B[i]%mod;
-	NTT(A,-1); return A;
-}

@@ -1,2 +1,0 @@
-template<typename T>
-bool chk_max(T&x,const T&y){ return (x<y?(x=y,1):0); }
