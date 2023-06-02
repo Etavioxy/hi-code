@@ -42,8 +42,6 @@ function readCode(){
   return JSON.stringify(a);
 }
 
-console.log(readCode());
-
 const server = http.createServer((req, res) => {
   let pathname = url.parse(req.url).pathname
   console.log('connect - pathname: ', pathname)
