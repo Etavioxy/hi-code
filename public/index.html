@@ -12,12 +12,12 @@
   <link rel="stylesheet" href="mono-blue.min.css"/>
   <script src="highlight.min.js"></script>
   <script src="highlightjs-vue.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.js"></script>
+  <script src="markdown-it.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/markdown-it-texmath/texmath.min.js"></script>
+  <link rel="stylesheet" href="texmath.min.css">
+  <script src="markdown-it.min.js"></script>
+  <script src="katex.min.js"></script>
+  <script src="texmath.min.js"></script>
   <style>
     #app{
       margin: 0 5%;
@@ -56,7 +56,7 @@
     <div v-for="(code,genre) in data">
       <h2>{{genre}}</h2>
       <section v-for="x in code">
-        <h3>{{x.name}}</h3>
+        <h3 :id="x.name">{{x.name}}</h3>
         <highlightjs :autodetect="false" language="cpp" :code="x.text.code"></highlightjs>
         <markdownit :text="x.text.comment"></markdownit>
       </section>
