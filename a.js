@@ -16,8 +16,8 @@ codeDir.replace('~', process.env.HOME)
 function parseCode(s){
   s = s.trimRight();
   let match = Array.from(s.matchAll(/(\/\*)|(\*\/)/g));
-  if( match.length!=2 ) return {code:s};
-  let [l,r] = match.map(x=>x.index);
+  if( match.length<2 ) return {code:s};
+  let [l,r] = match.slice(match.length-2, match.length).map(x=>x.index);
   if( s.length-2!=r ) return {code:s};
   return {
     code: s.substr(0, l-1),
