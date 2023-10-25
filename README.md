@@ -10,7 +10,7 @@ node a.js [codedir]
 
 ---
 
-文件末尾带有/**/的注释，会转化为markdown文件
+文件末尾带有/**/的注释，会转化为markdown
 
 使用.classify.json配置文件，可以实现分组。
 
