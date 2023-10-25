@@ -12,6 +12,11 @@ let codeDir = process.argv[2];
 let debugOn = process.argv[3] === "--debug"
 codeDir.replace('~', process.env.HOME)
 
+if( debugOn ){
+  console.log('debugOn', debugOn)
+  console.log('codeDir', codeDir)
+}
+
 function readCode(){
   let classifyFile = path.join(codeDir, '.classify.json');
   let a = {};
@@ -57,6 +62,6 @@ const server = http.createServer((req, res) => {
 
 })
 
-console.log('listen on http://localhost:8080')
+console.log('listen on http://0.0.0.0:8080')
 
-server.listen(8080, 'localhost')
+server.listen(8080, '0.0.0.0')
