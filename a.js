@@ -46,7 +46,16 @@ const server = http.createServer((req, res) => {
     return ;
   }
 
-  if( pathname === '/' ) pathname += 'index.html';
+  // 检测请求的主机地址
+  const isLocalhost = req.headers.host.startsWith('localhost');
+
+  if( pathname === '/' ){
+    if (isLocalhost) {
+      pathname += 'index2.html';
+    } else {
+      pathname += 'index.html';
+    }
+  }
 
   pathname = 'public'+pathname;
   fs.readFile(pathname, (err, data) => {
