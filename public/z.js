@@ -50,6 +50,17 @@ const app = Vue.createApp({
         }
       }
       this.data = data;
+    }).then(()=>{
+      // 从 URL 中获取 # 标记
+      let hash = location.hash;
+      // 去掉 # 号，得到 id 参数
+      let id = hash.slice(1);
+      // 根据 id 参数，获取对应的元素
+      let element = document.getElementById(id);
+      // 如果元素存在，滚动到该元素
+      if (element) {
+        element.scrollIntoView();
+      }
     });
   }
 })
